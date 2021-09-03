@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request
+from search import searchPhotos
+from recs import homeRecs
 import login
+import json
 
 app = Flask(__name__)
 
@@ -30,6 +33,27 @@ def signup():
     
     else:
         return render_template('signup.html')
+
+@app.route('/home')
+def searchS():
+  # recs = homeRecs()
+  return render_template('search.html')
+
+@app.route('/search', methods=['POST'])
+def search():
+  searchTag = request.form["search"]
+  loadQ = int(request.form["load"]) * 2
+  tags = searchPhotos(searchTag,loadQ)
+  return render_template('search.html', searchTag=searchTag, tags=tags)
+
+@app.route('/load')
+def load():
+  if request.args:
+    loadValue = int(request.args.get("value"))  # The 'counter' value sent in the QS
+    searchTag = str(request.args.get("tag"))
+    tags = searchPhotos(searchTag,loadValue)
+    tags = json.dumps(tags)
+  return tags
 
 
 
