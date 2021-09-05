@@ -34,11 +34,13 @@ def signup():
     else:
         return render_template('signup.html')
 
+# render index
 @app.route('/home')
-def searchS():
+def home():
   # recs = homeRecs()
-  return render_template('search.html')
+  return render_template('index.html')
 
+# render search
 @app.route('/search', methods=['POST'])
 def search():
   searchTag = request.form["search"]
@@ -46,6 +48,7 @@ def search():
   tags = searchPhotos(searchTag,loadQ)
   return render_template('search.html', searchTag=searchTag, tags=tags)
 
+# funcion para scroll infinito
 @app.route('/load')
 def load():
   if request.args:
@@ -54,6 +57,11 @@ def load():
     tags = searchPhotos(searchTag,loadValue)
     tags = json.dumps(tags)
   return tags
+
+# render profile
+@app.route('/profile')
+def profile():
+  return render_template('profile.html')
 
 
 

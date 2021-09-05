@@ -47,7 +47,7 @@ function loadItems(tag) {
       for (var i = 0; i < response.length; i++) {
         var clon = cub.content.cloneNode(true);
         clon.getElementById("image").src = response[i];
-        clon.getElementById("test").innerHTML = '<a href="' + response[i] + '" download ><button type="button">Download</button></a>'
+        clon.getElementById("test").innerHTML = '<a href="' + response[i] + '" download ><button type="button"style="background-color:transparent; border:black" ><span class="material-icons">file_download</span></button></a>'
         scroll.appendChild(clon);
           
       }
