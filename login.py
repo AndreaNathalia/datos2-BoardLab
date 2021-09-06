@@ -1,3 +1,5 @@
+from peewee import *
+
 #dicccionario para simular la base de datos
 dbUsuarios = {"username": "", "email": "", "password": ""}
 
