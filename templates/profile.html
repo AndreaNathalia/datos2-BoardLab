@@ -26,8 +26,21 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('profile') }}">Profile</a></li>
+                        <!-- Home -->
+                        <li class="nav-item">
+                            <form action="{{ url_for('home') }}" method="post">
+                                <input type="hidden" name='homeUser' id="homeUser" value={{username}} />
+                                <input type="submit" value="Home" style="background-color:transparent; border:black">
+                            </form>
+                        </li>
+                        <!-- Profile -->
+                        <li class="nav-item" >
+                            <form action="{{ url_for('profile') }}" method="post" >
+                                <input type="hidden" name='profileUser' id="profileUser" value={{username}} />
+                                <input type="submit" value="Profile" style="background-color:transparent; border:black">
+                            </form>
+                        </li>
+                        <!-- notificaciones -->
                         <li class="nav-item"><a class="nav-link" href="#!"><span class="material-icons">notifications_active</span></a></li>
                     </ul>
                       <!-- Search bar -->
@@ -35,12 +48,12 @@
                         <form action="/search" method="POST">
                             <input type="text" placeholder="Search.." name="search" id="sBox"/>
                             <input type="hidden" name="load" value="1" id="load"/>
+                            <input type="hidden" name="searchuser" value={{username}} id="searchuser"/>
                             <button type="submit" style="background-color: transparent; border: none;">
                                 <span class="material-icons">search</span>
                             </button>
                         </form>
                     </div>
-                    <!--  -->
                 </div>
             </div>
         </nav>
@@ -49,7 +62,7 @@
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
                     <!-- info usuario -->
-                    <h1 class="display-4 fw-bolder">NOMBRE APELLIDO</h1>
+                    <h1 class="display-4 fw-bolder">{{username}}</h1>
                     <p class="lead fw-normal text-white-50 mb-0">1000 SEGUIDORES</p>
                     <p class="lead fw-normal text-white-50 mb-0">1000 SEGUIDOS</p>
 
@@ -57,34 +70,45 @@
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent" style="float: right;">
                         <div class="text-center" ><a href="#"></a><span class="material-icons" style="font-size: 50px; margin-right: -400%;">add_box</span></a></div>
                     </div>
+
                 </div>
             </div>
         </header>
+
         <!-- Section-->
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder" id="title">{{searchTag}}</h5>
-                                    <!-- Product price-->
-                                    $40.00 - $80.00
+                    <!-- cubito foto-->
+                    {% for link in links%}
+                        <div class="col mb-5" >
+                            <div class="card h-100" id="cubo">
+                                <!-- Product image-->
+                                <img class="card-img-top" src="{{link}}" alt="..." id="image"/>
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder" id="title"></h5>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div>
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent" style="float: left;">
-                                    <div class="text-center"><span id=test></span></div>
+                                <!-- Product actions-->
+                                <div>
+                                    <!-- download -->
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent" style="float: left;">
+                                        <div class="text-center">
+                                            <a href="{{link}}" download id="downloadPht">
+                                                <button type="button" style="background-color:transparent; border:black" >
+                                                    <span class="material-icons">file_download</span>
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
+                    <!-- fin cubito foto -->
                 </div>
             </div>
         </section>

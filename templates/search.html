@@ -26,21 +26,34 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('profile') }}">Profile</a></li>
+                        <!-- Home -->
+                        <li class="nav-item">
+                            <form action="{{ url_for('home') }}" method="post">
+                                <input type="hidden" name='homeUser' id="homeUser" value={{username}} />
+                                <input type="submit" value="Home" style="background-color:transparent; border:black">
+                            </form>
+                        </li>
+                        <!-- Profile -->
+                        <li class="nav-item" >
+                            <form action="{{ url_for('profile') }}" method="post" >
+                                <input type="hidden" name='profileUser' id="profileUser" value={{username}} />
+                                <input type="submit" value="Profile" style="background-color:transparent; border:black">
+                            </form>
+                        </li>
+                        <!-- notificaciones -->
                         <li class="nav-item"><a class="nav-link" href="#!"><span class="material-icons">notifications_active</span></a></li>
                     </ul>
-                    <!-- Search bar -->
-                    <div class="d-flex">
+                      <!-- Search bar -->
+                      <div class="d-flex">
                         <form action="/search" method="POST">
                             <input type="text" placeholder="Search.." name="search" id="sBox"/>
                             <input type="hidden" name="load" value="1" id="load"/>
+                            <input type="hidden" name="searchuser" value={{username}} id="searchuser"/>
                             <button type="submit" style="background-color: transparent; border: none;">
                                 <span class="material-icons">search</span>
                             </button>
                         </form>
                     </div>
-                    <!--  -->
                 </div>
             </div>
         </nav>
@@ -57,8 +70,8 @@
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
                 <div id="scroller" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
                     <!-- cubito foto-->
-                    <!-- {% for tag in tags%} -->
                     <template id="cubito">
                         <div class="col mb-5" >
                             <div class="card h-100" id="cubo">
@@ -75,30 +88,46 @@
                                 </div>
                                 <!-- Product actions-->
                                 <div>
+                                    <!-- download -->
                                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent" style="float: left;">
-                                        <div class="text-center"><span id=test></span></div>
+                                        <div class="text-center">
+                                            <a href="" download id="downloadPht">
+                                                <button type="button" style="background-color:transparent; border:black" >
+                                                    <span class="material-icons">file_download</span>
+                                                </button>
+                                            </a>
+                                        </div>
                                     </div>
-
-                                    <!-- <div class="card-footer p-4 pt-0 border-top-0 bg-transparent" style="float: right;">
-                                        <div class="text-center" ><a href="#"></a><span class="material-icons">add_box</span></a></div>
-                                    </div> -->
-                                    <form action="/adder" method="post">
-                                        <input type="hidden" name='link' id="link" value="" />
-                                        <input type="hidden" name='adderuser' id="adderuser" value={{username}} />
-                                        <input type="submit" value="Submit">
-                                      </form>
+                                    <!-- add to board -->
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent" style="float: left;">
+                                        <div class="text-center">
+                                            <a href="" id="addPht">
+                                                <form action="/adder" method="post">
+                                                    <input type="hidden" name='link' id="link" value="" />
+                                                    <input type="hidden" name='adderUser' id="adderUser" value={{username}} />
+                                                    <input type="submit" value="+" style="background-color:transparent; border:black" >
+                                                    <!-- <button type="button" style="background-color:transparent; border:black" >
+                                                        <span class="material-icons">add_box</span>
+                                                    </button> -->
+                                                </form>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </template>
-                    <!-- {% endfor %} -->
                     <!-- fin cubito foto -->
+
                 </div>
+
                 <!-- Load more element to trigger the IntersectionObserver -->
                 <div class="d-flex justify-content-center mb-3" id="sentinel">
                     <div class="spinner-border" role="status"></div>
                 </div>
+
             </div>
+            
         </section>
         <!-- Footer-->
         <footer class="py-5 bg-dark">
