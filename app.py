@@ -14,9 +14,20 @@ class Users(Model):
     class Meta:
         database = db 
 
+class Tablero(Model):
+    user = ForeignKeyField(Users, backref = 'fotos')
+    link = CharField()
+    class Meta:
+        database = db 
+
+class Holder(Model):
+    username = CharField()
+    class Meta:
+        database = db 
 db.connect()
 
-db.create_tables([Users])
+db.create_tables([Users,Tablero,Holder])
+
 
 
 #--------------------------------------------
@@ -31,7 +42,7 @@ def logIn():
         dbuser = Users.select().where(Users.username == username).get()
         
         if(dbuser.password == password):
-            return render_template('index.html')
+            return render_template('index.html',username = username)
     
     else:
         return render_template('login.html')
@@ -54,15 +65,17 @@ def signup():
 @app.route('/home')
 def home():
   # recs = homeRecs()
-  return render_template('index.html')
+  username = request.form['valueuser']
+  return render_template('index.html',username = username)
 
 # render search
 @app.route('/search', methods=['POST'])
 def search():
+  username = request.form['searchuser']
   searchTag = request.form["search"]
   loadQ = int(request.form["load"]) * 2
   tags = searchPhotos(searchTag,loadQ)
-  return render_template('search.html', searchTag=searchTag, tags=tags)
+  return render_template('search.html', searchTag=searchTag, tags=tags,username = username)
 
 # funcion para scroll infinito
 @app.route('/load')
@@ -75,10 +88,27 @@ def load():
   return tags
 
 # render profile
-@app.route('/profile')
+@app.route('/profile',methods=['POST','GET'])
 def profile():
+  username = request.form['valueuser']
+
+  linklist = []
+
+  for i in Tablero.select().join(Users).where(Users.username == username):
+    linklist.append(i.link)
+  print(linklist)
+
   return render_template('profile.html')
 
+# render profile
+@app.route('/adder',methods=['POST','GET'])
+def adder():
+  link = request.form["link"]
+  username = request.form['adderuser']
+  dbuser = Users.select().where(Users.username == username).get()
+  newlink = Tablero.create(user = dbuser,link= link)
+  newlink.save()
+  return render_template('profile.html',username = username)
 
 
 if __name__ == "__main__":

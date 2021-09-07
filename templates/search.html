@@ -79,9 +79,14 @@
                                         <div class="text-center"><span id=test></span></div>
                                     </div>
 
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent" style="float: right;">
+                                    <!-- <div class="card-footer p-4 pt-0 border-top-0 bg-transparent" style="float: right;">
                                         <div class="text-center" ><a href="#"></a><span class="material-icons">add_box</span></a></div>
-                                    </div>
+                                    </div> -->
+                                    <form action="/adder" method="post">
+                                        <input type="hidden" name='link' id="link" value="" />
+                                        <input type="hidden" name='adderuser' id="adderuser" value={{username}} />
+                                        <input type="submit" value="Submit">
+                                      </form>
                                 </div>
                             </div>
                         </div>

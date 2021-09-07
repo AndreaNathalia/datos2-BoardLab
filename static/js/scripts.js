@@ -48,8 +48,9 @@ function loadItems(tag) {
         var clon = cub.content.cloneNode(true);
         clon.getElementById("image").src = response[i];
         clon.getElementById("test").innerHTML = '<a href="' + response[i] + '" download ><button type="button"style="background-color:transparent; border:black" ><span class="material-icons">file_download</span></button></a>'
+        clon.getElementById("link").value = response[i]; 
         scroll.appendChild(clon);
-          
+        
       }
     })
 }

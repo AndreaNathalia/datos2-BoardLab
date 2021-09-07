@@ -27,14 +27,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('profile') }}">Profile</a></li>
+                        <li class="nav-item" ><a class="nav-link" href="{{ url_for('profile') }}">Profile</a></li>
                         <li class="nav-item"><a class="nav-link" href="#!"><span class="material-icons">notifications_active</span></a></li>
+                        
                     </ul>
                       <!-- Search bar -->
                       <div class="d-flex">
                         <form action="/search" method="POST">
                             <input type="text" placeholder="Search.." name="search" id="sBox"/>
                             <input type="hidden" name="load" value="1" id="load"/>
+                            <input type="hidden" name="searchuser" value={{username}} id="searchuser"/>
                             <button type="submit" style="background-color: transparent; border: none;">
                                 <span class="material-icons">search</span>
                             </button>
@@ -50,6 +52,14 @@
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">Shop in style</h1>
                     <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+                    <form action="/profile" method="post">
+                        <input type="hidden" name='valueuser' id="valueuser" value={{username}} />
+                        <input type="submit" value="Profile">
+                      </form>
+                      <form action="/home" method="post">
+                        <input type="hidden" name='valueuser' id="valueuser" value={{username}} />
+                        <input type="submit" value="home">
+                      </form>
                 </div>
             </div>
         </header>
