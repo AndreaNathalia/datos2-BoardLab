@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from search import searchPhotos
 from recs import homeRecs
 import login
@@ -20,17 +20,11 @@ class Tablero(Model):
     class Meta:
         database = db 
 
-class Holder(Model):
-    username = CharField()
-    class Meta:
-        database = db 
 db.connect()
 
-db.create_tables([Users,Tablero,Holder])
-
-
-
+db.create_tables([Users,Tablero])
 #--------------------------------------------
+
 app = Flask(__name__)
 
 # render login / index
