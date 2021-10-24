@@ -4,25 +4,28 @@ from recs import homeRecs
 import login
 import json
 from peewee import *
-#base de datos
-db = SqliteDatabase('people.db')
+# #base de datos
+# db = SqliteDatabase('people.db')
 
-class Users(Model):
-    username = CharField()
-    email = CharField()
-    password = CharField()
-    class Meta:
-        database = db 
+# class Users(Model):
+#     username = CharField()
+#     email = CharField()
+#     password = CharField()
+#     class Meta:
+#         database = db 
 
-class Tablero(Model):
-    user = ForeignKeyField(Users, backref = 'fotos')
-    link = CharField()
-    class Meta:
-        database = db 
+# class Tablero(Model):
+#     user = ForeignKeyField(Users, backref = 'fotos')
+#     link = CharField()
+#     class Meta:
+#         database = db 
 
-db.connect()
+# db.connect()
 
-db.create_tables([Users,Tablero])
+# db.create_tables([Users,Tablero])
+
+from elasticsearch import Elasticsearch
+es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 #--------------------------------------------
 
 app = Flask(__name__)
@@ -33,9 +36,19 @@ def logIn():
     if request.method=='POST':
         username = request.form['username']
         password = request.form['password']
-        dbuser = Users.select().where(Users.username == username).get()
+        # dbuser = Users.select().where(Users.username == username).get()
         
-        if(dbuser.password == password):
+        # if(dbuser.password == password):
+        #     return render_template('index.html', username = username)
+        
+        test = es.search(index='users', body={"query": {"match": {'_id': username}}})
+        test2 = test['hits']['hits']
+
+        for i in test2:
+            userpass = i['_source']['password']
+            if userpass == password:
+                userpass2 = userpass
+        if userpass2 == password:        
             return render_template('index.html', username = username)
     
     else:
@@ -48,8 +61,10 @@ def signup():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-        NewUser = Users.create(username = username,email = email, password = password)
-        NewUser.save()
+
+        es.index(index='users', doc_type='people', id=username, body={'email':email,'password':password})
+        # NewUser = Users.create(username = username,email = email, password = password)
+        # NewUser.save()
         return render_template('login.html')
     
     else:
@@ -87,9 +102,15 @@ def load():
 def profile():
   username = request.form['profileUser']
   linklist = []
+  print(username)
+  # for i in Tablero.select().join(Users).where(Users.username == username):
+  #   linklist.append(i.link)
 
-  for i in Tablero.select().join(Users).where(Users.username == username):
-    linklist.append(i.link)
+  test = es.search(index='table', body={"query": {"match": {'user': username}}})
+  test2 = test['hits']['hits']
+  for i in test2:
+      linklist.append(i['_id'])
+  print (linklist)   
 
   return render_template('profile.html', username = username, links = linklist)
 
@@ -98,10 +119,12 @@ def profile():
 def adder():
   link = request.form["link"]
   username = request.form['adderUser']
+  
+  # dbuser = Users.select().where(Users.username == username).get()
+  # newlink = Tablero.create(user = dbuser,link= link)
+  # newlink.save()
 
-  dbuser = Users.select().where(Users.username == username).get()
-  newlink = Tablero.create(user = dbuser,link= link)
-  newlink.save()
+  es.index(index='table', doc_type='link', id=link, body={'user': username})
 
   return render_template('profile.html', username = username)
 
