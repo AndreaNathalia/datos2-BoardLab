@@ -1,10 +1,21 @@
 import requests
-
+import memcache
 from elasticsearch import Elasticsearch
-es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+# es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+
+
+mc = memcache.Client(['127.0.0.1:11211'], debug=0)
+mc.set("some_key", "Some value")
+value = mc.get("some_key")
+mc.set("another_key", 3)
+mc.delete("another_key")
+mc.set("key", "1")   # note that the key used for incr/decr must be a string.
+mc.incr("key")
+mc.decr("key")
+
 #-----------------------------------------------------------------------------
 #function to add user to list
-
+print(value)
 
 # es.index(index='users', doc_type='people', id=username, body={'email':email,'password':password})
 
@@ -28,18 +39,18 @@ es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 
 # function to create link in tablero
 
-# es.index(index='table', doc_type='link', id='linkhttps', body={'user': 'username'})
+# es.index(index='table', doc_type='link', id=username, body={'link': link})
 
 
 #-----------------------------------------------------------------------------
 
 # get all links for tableros
-linklist= []
-test = es.search(index='table', body={"query": {"match": {'user': 'username'}}})
-test2 = test['hits']['hits']
-for i in test2:
-    linklist.append(i['_id'])
-print (linklist)   
+# linklist= []
+# test = es.search(index='table', body={"query": {"match": {'user': username}}})
+# test2 = test['hits']['hits']
+# for i in test2:
+#     linklist.append(i['source']['link'])
+# print (linklist)   
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
 
