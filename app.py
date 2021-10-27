@@ -1,31 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
 from search import searchPhotos
 from recs import homeRecs
-import login
+
 import flask_profiler
 
 import json
 from peewee import *
 import memcache
-# #base de datos
-# db = SqliteDatabase('people.db')
 
-# class Users(Model):
-#     username = CharField()
-#     email = CharField()
-#     password = CharField()
-#     class Meta:
-#         database = db 
-
-# class Tablero(Model):
-#     user = ForeignKeyField(Users, backref = 'fotos')
-#     link = CharField()
-#     class Meta:
-#         database = db 
-
-# db.connect()
-
-# db.create_tables([Users,Tablero])
 
 from elasticsearch import Elasticsearch
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
@@ -36,20 +18,20 @@ app.config["DEBUG"] = True
 
 # You need to declare necessary configuration to initialize
 # flask-profiler as follows:
-app.config["flask_profiler"] = {
-    "enabled": app.config["DEBUG"],
-    "storage": {
-        "engine": "sqlite"
-    },
-    "basicAuth":{
-        "enabled": True,
-        "username": "admin",
-        "password": "admin"
-    },
-    "ignore": [
-	    "^/static/.*"
-	]
-}
+# app.config["flask_profiler"] = {
+#     "enabled": app.config["DEBUG"],
+#     "storage": {
+#         "engine": "sqlite"
+#     },
+#     "basicAuth":{
+#         "enabled": True,
+#         "username": "admin",
+#         "password": "admin"
+#     },
+#     "ignore": [
+# 	    "^/static/.*"
+# 	]
+# }
 # render login / index
 @app.route('/', methods =['GET', 'POST'])
 def logIn():
@@ -107,34 +89,38 @@ def search():
   loadQ = int(request.form["load"]) * 2
   tags = searchPhotos(searchTag,loadQ)
 
-  # dbuser = Users.select().where(Users.username == username).get()
-  # newSearch = Busquedas.create(user = dbuser,tag= searchTag)
-  # newSearch.save()
 
   es.index(index='busquedas', doc_type='tag', id=searchTag, body={'username':username})
+  mc.set('search',searchTag)
   listaBusquedas = busquedasCache(username)
+  # listaBusquedas = ['fut','lentes']
   
 
 
-  return render_template('search.html', searchTag=searchTag, tags=tags, username = username, searchslist = listaBusquedas)
+  return render_template('search.html', searchTag=searchTag, tags=tags, username = username,searchslist = listaBusquedas)
 
 def busquedasCache(username):
   searchslist = []
-
-  test = es.search(index='busquedas', body={"query": {"match": {'username': username}}})
-  test2 = test['hits']['hits']
-  for i in test2:
-      searchslist.append(i['_id'])
-  print (searchslist)  
+  if mc.get("searchs") != None:
   
-  searchslistNoRep = []
-  [searchslistNoRep.append(x) for x in searchslist if x not in searchslistNoRep]
-  SearchsFinal = ' '.join(searchslistNoRep).split()
+    cache = mc.get("searchs")
+    return cache
+                                    
 
-  mc.set("searchs", SearchsFinal)
-  cache = mc.get("searchs")
-  print(cache)
-  return cache
+  else:
+    test = es.search(index='busquedas', body={"query": {"match": {'username': username}}})
+    test2 = test['hits']['hits']
+    for i in test2:
+      searchslist.append(i['_id'])
+      
+
+  
+    searchslistNoRep = []
+    [searchslistNoRep.append(x) for x in searchslist if x not in searchslistNoRep]
+    SearchsFinal = ' '.join(searchslistNoRep).split()
+
+   
+    return SearchsFinal
 
 
 # funcion para scroll infinito
@@ -179,7 +165,7 @@ def adder():
   listaBusquedas = busquedasCache(username)
   return render_template('profile.html', username = username, searchslist = listaBusquedas)
 
-flask_profiler.init_app(app)
+# flask_profiler.init_app(app)
 
 if __name__ == "__main__":
   app.run(debug=True)
