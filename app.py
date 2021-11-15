@@ -92,8 +92,8 @@ def search():
 
   es.index(index='busquedas', doc_type='tag', id=searchTag, body={'username':username})
   mc.set('search',searchTag)
-  listaBusquedas = busquedasCache(username)
-  # listaBusquedas = ['fut','lentes']
+  # listaBusquedas = busquedasCache(username)
+  listaBusquedas = ['fut','lentes']
   
 
 
