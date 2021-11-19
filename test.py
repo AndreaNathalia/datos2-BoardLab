@@ -1,73 +1,89 @@
-import requests
-import memcache
-from elasticsearch import Elasticsearch
-# es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+import mysql.connector
+
+mydb = mysql.connector.connect(
+  host="localhost",
+  port='3306',
+  user="root",
+  password="12345678",
+  database="boardlab"
+  
+)
+
+mycursor = mydb.cursor()
+
+# mycursor.execute("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY,user VARCHAR(255), email VARCHAR(255),password VARCHAR(255))")
+
+# mycursor.execute("CREATE TABLE links (id INT AUTO_INCREMENT PRIMARY KEY,link VARCHAR(700), user VARCHAR(255))")
 
 
-mc = memcache.Client(['127.0.0.1:11211'], debug=0)
-mc.set("some_key", "Some value")
-value = mc.get("some_key")
-mc.set("another_key", 3)
-mc.delete("another_key")
-mc.set("key", "1")   # note that the key used for incr/decr must be a string.
-mc.incr("key")
-mc.decr("key")
-
-#-----------------------------------------------------------------------------
-#function to add user to list
-print(value)
-
-# es.index(index='users', doc_type='people', id=username, body={'email':email,'password':password})
 
 
-#-----------------------------------------------------------------------------
 
-#function to check password
+mycursor.execute("SELECT * FROM users")
 
-# test = es.search(index='users', body={"query": {"match": {'_id': username}}})
-# test2 = test['hits']['hits']
+myresult = mycursor.fetchall()
 
-# for i in test2:
-#     userpass = i['_source']['password']
-#     if userpass == password:
-#         userpass2 = userpass
-# if userpass2 == password:        
+for x in myresult:
+  print(x)
+# mycursor.execute("SELECT * FROM users")
+
+# myresult = mycursor.fetchall()
+
+# for x in myresult:
+#   es.index(index='users', doc_type='people', id=x[0], body={'email':x[1],'password':x[2]})
+#signup
+
+# sql = "INSERT INTO users (user, email , password) VALUES (%s, %s)"
+# val = (username,email,password)
+# mycursor.execute(sql, val)
+
+# mydb.commit()
+
+# print(mycursor.rowcount, "record inserted.")
+
+#sign in
+
+# sql = "SELECT password FROM users WHERE user ={}".format(username)
+
+# mycursor.execute(sql)
+
+# myresult = mycursor.fetchall()
+
+# if myresult[0] == password:        
 #     return render_template('index.html', username = username)
+# else:
+#         return render_template('login.html')
 
 
-#-----------------------------------------------------------------------------
+#create link
 
-# function to create link in tablero
+# sql = "INSERT INTO links (link,user) VALUES (%s, %s)"
+# val = (link,username)
+# mycursor.execute(sql, val)
 
-# es.index(index='table', doc_type='link', id=username, body={'link': link})
+# mydb.commit()
 
-
-#-----------------------------------------------------------------------------
-
-# get all links for tableros
-# linklist= []
-# test = es.search(index='table', body={"query": {"match": {'user': username}}})
-# test2 = test['hits']['hits']
-# for i in test2:
-#     linklist.append(i['source']['link'])
-# print (linklist)   
-#-----------------------------------------------------------------------------
-#-----------------------------------------------------------------------------
+# print(mycursor.rowcount, "record inserted.")
 
 
+#get links
 
+# sql = "SELECT link FROM links WHERE user ={}".format(username)
 
+# mycursor.execute(sql)
 
-# try:    
-#     test =es.get(index='users', doc_type='people', id='username')
-#     print(test)
+# linklist = mycursor.fetchall()
+
+# try:
+#   test = es.search(index='table', body={"query": {"match": {'user': username}}})
+#   test2 = test['hits']['hits']
+#   for i in test2:
+#       linklist.append(i['_id'])
+#   print (linklist) 
+
 # except:
-#     print('not')
+#   sql = "SELECT link FROM links WHERE user ={}".format(username)
+#   mycursor.execute(sql)
+#   linklist = mycursor.fetchall()
 
-#index some test data
-# es.index(index='test-index', doc_type='test', id=1, body={'test': 'test'})
-# es.delete(index='test-index', doc_type='test', id=1)
-
-
-# print(test)
-# es.index(index='test-index', doc_type='test', id=1, body={'test': 'test'})
+  
