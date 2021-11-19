@@ -118,9 +118,12 @@ def signup():
         email = request.form['email']
         password = request.form['password']
         data = {
-                    'username' : request.form['username'],
+                    'user' : request.form['username'],
                     'email' : request.form['email'],
-                    'password' : request.form['password']
+                    'password' : request.form['password'],
+                    # 'searchTag': "-",
+                    'link': "-",
+
         }
 
 
@@ -164,13 +167,17 @@ def search():
   # listaBusquedas = busquedasCache(username)
   listaBusquedas = ['fut','lentes']
 
-  data = {
-            'username': request.form['searchuser'],
-            'searchTag': request.form["search"]
-        }
+  # data = {
+  #             'user' : request.form['searchuser'],
+  #             'email' : "-",
+  #             'password' : "-",
+  #             # 'searchTag': request.form["search"],
+  #             'link': "-",
+
+  # }
 
 
-  producer.send('board', data)
+  # producer.send('board', data)
 
 
   return render_template('search.html', searchTag=searchTag, tags=tags, username = username,searchslist = listaBusquedas)
@@ -246,9 +253,13 @@ def adder():
   # newlink = Tablero.create(user = dbuser,link= link)
   # newlink.save()
   data = {
-            'link': request.form['link'],
-            'username': request.form['adderUser']
-        }
+              'user' : request.form['username'],
+              'email' : "-",#request.form['email'],
+              'password' : "-",#request.form['password'],
+              # 'searchTag': "-",#request.form["search"],
+              'link': request.form['link'],
+
+  }
 
 
   producer.send('board', data)
