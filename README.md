@@ -28,9 +28,8 @@ BoardLab es una plataforma desarrollada en Python basada en el concepto de Pinte
 
 Para que este proyecto funcione a su máximo potencial es necesario levantar distintos servicios previos a correr la app principal:
 
----
-**NOTE**
 
+```
 ElasticSearch: 
 
 - .\elasticsearch-7.15.2\bin\elasticsearch.bat
@@ -53,7 +52,7 @@ Logstash:
 
 Python: 
 - python3 app.py 
----
+```
 
 
 ## App
@@ -73,7 +72,9 @@ El proyecto cuenta con 2 nodos que se ejecutan de la siguiente manera:
 Las siguientes capturas de pantalla son ejemplos del dashboard de Kibana de BoardLab:
 
 ![Image text]()
+
 ![Image text]()
+
 ![Image text]()
 
 
@@ -89,27 +90,34 @@ Para realizar profiling al proyecto se utilizó flask-profiler. Después de ejec
 Las pruebas de carga del proyecto se realizaron con Jmeter, con las cuales se obtuvieron los siguientes resultados:
 
 /
+
 ![Image text]()
 
 Login
+
 ![Image text]()
 
 Signup
+
 ![Image text]()
 
 Search
+
 ![Image text]()
 
 Profile
+
 ![Image text]()
 
 Adder
+
 ![Image text]()
 
 
 
 ## Requerimientos - Librerías para el proyecto
 
+```
 - pip install Flask
 - pip install peewee
 - pip install python-memcached
@@ -117,7 +125,7 @@ Adder
 - pip install elasticsearch
 - pip install kafka-python
 - pip install python-logstash
-
+```
 
 
 
