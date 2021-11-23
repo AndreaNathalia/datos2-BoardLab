@@ -11,20 +11,20 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-# mycursor.execute("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY,user VARCHAR(255), email VARCHAR(255),password VARCHAR(255))")
+# mycursor.execute("CREATE TABLE usuarios (  user VARCHAR(255) PRIMARY KEY, email VARCHAR(255),password VARCHAR(255),link VARCHAR(1000))")
 
 # mycursor.execute("CREATE TABLE links (id INT AUTO_INCREMENT PRIMARY KEY,link VARCHAR(700), user VARCHAR(255))")
 
 
-
-
-
-mycursor.execute("SELECT * FROM users")
-
+sql = "SELECT email,password,link FROM usuarios WHERE user ='{}'".format('test3')
+mycursor.execute(sql)
 myresult = mycursor.fetchall()
 
-for x in myresult:
-  print(x)
+print(myresult)
+# mycursor.execute("SELECT * FROM usuarios")
+
+# myresult = mycursor.fetchall()
+# print(myresult)
 # mycursor.execute("SELECT * FROM users")
 
 # myresult = mycursor.fetchall()
@@ -86,4 +86,7 @@ for x in myresult:
 #   mycursor.execute(sql)
 #   linklist = mycursor.fetchall()
 
-  
+# link = 'go,hola,adios'  
+
+# link_list= link.split(',')
+

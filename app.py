@@ -35,10 +35,10 @@ mydb = mysql.connector.connect(
   port='3306',
   user="root",
   password="12345678",
-  database="boardlab"
+  database="boardlab",
+  autocommit = True # Used to handle logstash async
 )
-
-mycursor = mydb.cursor()
+mycursor = mydb.cursor(dictionary=True, buffered=True)
 
 
 #------------------------------------------------
@@ -61,20 +61,20 @@ app.config["DEBUG"] = True
 
 # You need to declare necessary configuration to initialize
 # flask-profiler as follows:
-# app.config["flask_profiler"] = {
-#     "enabled": app.config["DEBUG"],
-#     "storage": {
-#         "engine": "sqlite"
-#     },
-#     "basicAuth":{
-#         "enabled": True,
-#         "username": "admin",
-#         "password": "admin"
-#     },
-#     "ignore": [
-# 	    "^/static/.*"
-# 	]
-# }
+app.config["flask_profiler"] = {
+    "enabled": app.config["DEBUG"],
+    "storage": {
+        "engine": "sqlite"
+    },
+    "basicAuth":{
+        "enabled": True,
+        "username": "admin",
+        "password": "admin"
+    },
+    "ignore": [
+	    "^/static/.*"
+	]
+}
 
 
 
@@ -90,7 +90,7 @@ def logIn():
         
         
         try:
-          test = es.search(index='users', body={"query": {"match": {'_id': username}}})
+          test = es.search(index='logstash', body={"query": {"match": {'_id': username}}})
           test2 = test['hits']['hits']
 
           for i in test2:
@@ -99,8 +99,8 @@ def logIn():
                   userpass2 = userpass
           if userpass2 == password:        
             return render_template('index.html', username = username)
-        except ElasticConnectionError:
-          sql = "SELECT password FROM users WHERE user ={}".format(username)
+        except:
+          sql = "SELECT password FROM usuarios WHERE user ={}".format(username)
           mycursor.execute(sql)
           myresult = mycursor.fetchall()
 
@@ -121,8 +121,7 @@ def signup():
                     'user' : request.form['username'],
                     'email' : request.form['email'],
                     'password' : request.form['password'],
-                    # 'searchTag': "-",
-                    'link': "-",
+                    'link': "",
 
         }
 
@@ -225,21 +224,38 @@ def profile():
   print(username)
   # for i in Tablero.select().join(Users).where(Users.username == username):
   #   linklist.append(i.link)
-
   try:
-    test = es.search(index='table', body={"query": {"match": {'user': username}}})
+    test = es.search(index='logstash', body={"query": {"match": {'_id': username}}})
     test2 = test['hits']['hits']
-    for i in test2:
-        linklist.append(i['_id'])
-    print (linklist) 
 
-  except ElasticConnectionError:
-    linklist_final = []
-    sql = "SELECT link FROM links WHERE user ={}".format(username)
+    for i in test2:
+        link = i['_source']['link']
+
+    
+  except:
+    sql = "SELECT link FROM usuarios WHERE user ='{}'".format(username)
     mycursor.execute(sql)
-    linklist = mycursor.fetchall() 
-    for x in linklist:
-      linklist_final.append(x[0]) 
+    myresult = mycursor.fetchall()
+    for i in myresult:
+      link = i[0]
+      
+  linklist_final= link.split(',')
+  print(linklist_final)
+  # try:
+  #   test = es.search(index='logstash', body={"query": {"match": {'user': username}}})
+  #   test2 = test['hits']['hits']
+  #   for i in test2:
+  #       linklist.append(i['_id'])
+  #   print (linklist) 
+
+  # except ElasticConnectionError:
+  #   linklist_final = []
+  #   sql = "SELECT link FROM links WHERE user ={}".format(username)
+  #   mycursor.execute(sql)
+  #   linklist = mycursor.fetchall() 
+  #   for x in linklist:
+  #     linklist_final.append(x[0]) 
+
   listaBusquedas = busquedasCache(username)
   return render_template('profile.html', username = username, links = linklist_final, searchslist = listaBusquedas)
 
@@ -252,12 +268,32 @@ def adder():
   # dbuser = Users.select().where(Users.username == username).get()
   # newlink = Tablero.create(user = dbuser,link= link)
   # newlink.save()
+  try:
+    test = es.search(index='logstash', body={"query": {"match": {'_id': username}}})
+    test2 = test['hits']['hits']
+
+    for i in test2:
+        link_str = i['_source']['link']
+        email = i['_source']['email']
+        password = i['_source']['password']
+
+    link_str = link_str + ","+link   
+  except:
+    sql = "SELECT email,password,link FROM usuarios WHERE user ='{}'".format(username)
+    mycursor.execute(sql)
+    myresult = mycursor.fetchall()
+    for i in myresult:
+      link_str = i[2] + ","+ link
+      email = i[0]
+      password = i[1]
+
+
   data = {
-              'user' : request.form['username'],
-              'email' : "-",#request.form['email'],
-              'password' : "-",#request.form['password'],
+              'user' : request.form['adderUser'],
+              'email' : email,#request.form['email'],
+              'password' : password,#request.form['password'],
               # 'searchTag': "-",#request.form["search"],
-              'link': request.form['link'],
+              'link': link_str
 
   }
 
@@ -269,11 +305,11 @@ def adder():
   #   print("Something is wrong.")
   listaBusquedas = busquedasCache(username)
 
-  sql = "INSERT INTO links (link,user) VALUES (%s, %s)"
-  val = (link,username)
-  mycursor.execute(sql, val)
+  # sql = "INSERT INTO links (link,user) VALUES (%s, %s)"
+  # val = (link,username)
+  # mycursor.execute(sql, val)
 
-  mydb.commit()
+  # mydb.commit()
 
   return render_template('profile.html', username = username, searchslist = listaBusquedas)
 
