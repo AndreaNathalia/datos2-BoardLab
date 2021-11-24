@@ -16,7 +16,7 @@ Grupo: Piratas
 
 BoardLab es una plataforma desarrollada en Python basada en el concepto de Pinterest. El menú de la plataforma contiene tres opciones principales: home, profile y search. Los usuarios en la opción de home pueden visualizar imágenes random, las cuales pueden descargar para guardar localmente en sus computadoras o guardarlas en sus tableros personales dentro de la aplicación. En la barra de búsquedas del menú, los usuarios pueden buscar imágenes y visualizar una lista infinita de imágenes relacionadas con el tag que escribieron en el buscador. Cada usuario creado tiene acceso a su perfil que consta de un tablero con todas la imágenes que han guardado ya sea desde home o desde las búsquedas realizadas.
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/boardlab.png)
 
 
 ## UML
@@ -31,24 +31,17 @@ Para que este proyecto funcione a su máximo potencial es necesario levantar dis
 
 ```
 ElasticSearch: 
-
 - .\elasticsearch-7.15.2\bin\elasticsearch.bat
 
-
 Caché:
-
 - memcached.exe -d start
 
-
- Kafka:  
-
+Kafka:  
 - .\bin/zookeeper-server-start.sh config/zookeeper.properties
 - .\bin\windows\kafka-server-start.bat .\config\server.properties
 
-
 Logstash: 
 - .\bin\logstash -f .\config\logstash.yml
-
 
 Python: 
 - python3 app.py 
@@ -118,13 +111,13 @@ Adder
 ## Requerimientos - Librerías para el proyecto
 
 ```
-- pip install Flask
-- pip install peewee
-- pip install python-memcached
-- pip install flask-profiler
-- pip install elasticsearch
-- pip install kafka-python
-- pip install python-logstash
+pip install Flask
+pip install peewee
+pip install python-memcached
+pip install flask-profiler
+pip install elasticsearch
+pip install kafka-python
+pip install python-logstash
 ```
 
 
