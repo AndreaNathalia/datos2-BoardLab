@@ -21,7 +21,11 @@ BoardLab es una plataforma desarrollada en Python basada en el concepto de Pinte
 
 ## UML
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/uml1.png)
+
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/uml2.png)
+
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/uml3.png)
 
 
 ## Ejecución
@@ -57,25 +61,25 @@ Se puede acceder a la plataforma con el siguiente url: http://localhost:5000/
 
 El proyecto cuenta con 2 nodos que se ejecutan de la siguiente manera:
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/nodos.png)
 
 
 ## Kibana
 
 Las siguientes capturas de pantalla son ejemplos del dashboard de Kibana de BoardLab:
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/kibana.png)
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/kibana2.png)
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/kibana3.png)
 
 
 ## Profiler
 
 Para realizar profiling al proyecto se utilizó flask-profiler. Después de ejecutar todas las opciones de la plataforma, se accedió a la información que genera flask-profiler para visualizar las gráficas obtenidas:
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/profiler.png)
 
 
 ## Pruebas de carga
@@ -84,27 +88,27 @@ Las pruebas de carga del proyecto se realizaron con Jmeter, con las cuales se ob
 
 /
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/:.png)
 
 Login
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/login.png)
 
 Signup
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/signup.png)
 
 Search
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/search.png)
 
 Profile
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/profile.png)
 
 Adder
 
-![Image text]()
+![Image text](https://github.com/AndreaNathalia/datos2-BoardLab/blob/main/imgsDocumentacion/adder.png)
 
 
 
