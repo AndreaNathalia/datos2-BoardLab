@@ -1,6 +1,6 @@
 Proyecto Final Datos 2
 
-Grupo: Piratas
+Grupo: Piratas 🏴‍☠️
 
 * Fabricio Juarez 20190361
 
